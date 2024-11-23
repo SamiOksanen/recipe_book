@@ -4,9 +4,14 @@ import 'package:recipe_book/models/recipe.dart';
 class ViewRecipePage extends StatelessWidget {
   final Recipe recipe;
   final VoidCallback onClose;
+  final VoidCallback onRemove;
 
-  const ViewRecipePage({Key? key, required this.recipe, required this.onClose})
-      : super(key: key);
+  const ViewRecipePage({
+    Key? key,
+    required this.recipe,
+    required this.onClose,
+    required this.onRemove,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +60,14 @@ class ViewRecipePage extends StatelessWidget {
                     style: const TextStyle(fontSize: 16),
                   ),
                 )),
+            const Spacer(),
+            ElevatedButton.icon(
+              onPressed: onRemove,
+              icon: const Icon(Icons.delete),
+              label: const Text('Remove'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red, foregroundColor: Colors.white),
+            ),
           ],
         ),
       ),

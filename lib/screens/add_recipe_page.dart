@@ -58,53 +58,60 @@ class _AddRecipePageState extends State<AddRecipePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Recipe'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: _saveRecipe,
-          ),
-        ],
-      ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Title is required';
-                  }
-                  if (value.length > 100) {
-                    return 'Title must be less than 100 characters';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16.0),
-              _buildListSection(
-                'Items',
-                _itemControllers,
-                _addItem,
-                _removeItem,
-              ),
-              const SizedBox(height: 16.0),
-              _buildListSection(
-                'Steps',
-                _stepControllers,
-                _addStep,
-                _removeStep,
-              ),
-            ],
-          ),
+        appBar: AppBar(
+          title: const Text('Add Recipe'),
         ),
-      ),
-    );
+        body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _titleController,
+                        decoration: const InputDecoration(labelText: 'Title'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Title is required';
+                          }
+                          if (value.length > 100) {
+                            return 'Title must be less than 100 characters';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                      _buildListSection(
+                        'Items',
+                        _itemControllers,
+                        _addItem,
+                        _removeItem,
+                      ),
+                      const SizedBox(height: 16.0),
+                      _buildListSection(
+                        'Steps',
+                        _stepControllers,
+                        _addStep,
+                        _removeStep,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Spacer(),
+              ElevatedButton.icon(
+                onPressed: _saveRecipe,
+                icon: const Icon(Icons.save),
+                label: const Text('Save'),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white),
+              ),
+            ])));
   }
 
   Widget _buildListSection(
