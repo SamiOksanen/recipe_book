@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe_book/models/recipe.dart';
 import 'package:recipe_book/recipe_book_app_state.dart';
 
 class RecipeListPage extends StatelessWidget {
-  const RecipeListPage({super.key});
+  final void Function(Recipe recipe) onRecipeSelected;
+
+  const RecipeListPage({super.key, required this.onRecipeSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +26,12 @@ class RecipeListPage extends StatelessWidget {
           child: Text('You have '
               '${recipies.length} recipies:'),
         ),
-        for (var recipe in recipies)
+        for (Recipe recipe in recipies)
           ListTile(
             title: Text(recipe.title),
-            subtitle: Text('Items: ${recipe.items.length}, Steps: ${recipe.steps.length}'),
-            // trailing: Text('Items: ${recipe.items.join(', ')}, Steps: ${recipe.steps.join(', ')}'),
+            subtitle: Text(
+                'Items: ${recipe.items.length}, Steps: ${recipe.steps.length}'),
+            onTap: () => onRecipeSelected(recipe),
           ),
       ],
     );

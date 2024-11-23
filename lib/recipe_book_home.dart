@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:recipe_book/screens/add_page.dart';
+import 'package:recipe_book/models/recipe.dart';
+import 'package:recipe_book/screens/add_recipe_page.dart';
 import 'package:recipe_book/screens/recipe_list_page.dart';
-import 'package:recipe_book/recipe_book_app_state.dart';
+import 'package:recipe_book/screens/view_recipe_page.dart';
 
 class RecipeBookHomePage extends StatefulWidget {
   const RecipeBookHomePage({super.key});
@@ -12,35 +12,33 @@ class RecipeBookHomePage extends StatefulWidget {
 }
 
 class _RecipeBookHomePageState extends State<RecipeBookHomePage> {
-  var selectedIndex = 0;
+  int _selectedIndex = 0;
+  final PageController _pageController = PageController();
+  Recipe? _selectedRecipe;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _navigateToHome() {
+    setState(() {
+      _selectedIndex = 0; // Set the index to HomePage
+      _pageController.jumpToPage(0); // Navigate to HomePage
+    });
+  }
+
+  void _navigateToViewPage(Recipe recipe) {
+    setState(() {
+      _selectedRecipe = recipe; // Set the selected entry
+      _selectedIndex = 2; // Index for ViewPage
+      _pageController.jumpToPage(2);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<RecipeBookAppState>();
-    int currentPage = appState.currentPage;
-    selectedIndex = currentPage;
-
-    void _setPage(int value) {
-      setState(() {
-        selectedIndex = value;
-      });
-      Provider.of<RecipeBookAppState>(context, listen: false).setCurrentPage(value);
-    }
-
-    Widget page;
-    switch (currentPage) {
-      case 0:
-        page = const RecipeListPage();
-        break;
-      case 1:
-        page = const AddPage();
-        break;
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
-    }
-
-    // Provider.of<RecipeBookAppState>(context, listen: false).setCurrentPage(value);
-
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
         body: Row(
@@ -58,16 +56,27 @@ class _RecipeBookHomePageState extends State<RecipeBookHomePage> {
                     label: Text('Add'),
                   ),
                 ],
-                selectedIndex: selectedIndex,
+                selectedIndex: _selectedIndex > 1 ? 0 : _selectedIndex,
                 onDestinationSelected: (value) {
-                  _setPage(value);
+                  setState(() {
+                    _selectedIndex = value;
+                    _pageController
+                        .jumpToPage(value); // Navigate to the selected page
+                  });
                 },
               ),
             ),
             Expanded(
-              child: Container(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                child: page,
+              child: PageView(
+                controller: _pageController,
+                // physics: const NeverScrollableScrollPhysics(), // Disable swipe navigation
+                children: [
+                  RecipeListPage(onRecipeSelected: _navigateToViewPage),
+                  AddRecipePage(postSave: _navigateToHome),
+                  if (_selectedRecipe != null)
+                    ViewRecipePage(
+                        recipe: _selectedRecipe!, onClose: _navigateToHome),
+                ],
               ),
             ),
           ],

@@ -3,14 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:recipe_book/models/recipe.dart';
 import 'package:recipe_book/recipe_book_app_state.dart';
 
-class AddPage extends StatefulWidget {
-  const AddPage({super.key});
+class AddRecipePage extends StatefulWidget {
+  final VoidCallback postSave;
+  const AddRecipePage({Key? key, required this.postSave}) : super(key: key);
 
   @override
-  _AddPageState createState() => _AddPageState();
+  _AddRecipePageState createState() => _AddRecipePageState();
 }
 
-class _AddPageState extends State<AddPage> {
+class _AddRecipePageState extends State<AddRecipePage> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final List<TextEditingController> _itemControllers = [];
@@ -46,11 +47,11 @@ class _AddPageState extends State<AddPage> {
       final items = _itemControllers.map((c) => c.text.trim()).toList();
       final steps = _stepControllers.map((c) => c.text.trim()).toList();
 
-      final newEntry = Recipe(title: title, items: items, steps: steps);
+      final newRecipe = Recipe(title: title, items: items, steps: steps);
 
       Provider.of<RecipeBookAppState>(context, listen: false)
-          .addRecipe(newEntry);
-      Provider.of<RecipeBookAppState>(context, listen: false).setCurrentPage(0);
+          .addRecipe(newRecipe);
+      widget.postSave();
     }
   }
 
@@ -119,7 +120,8 @@ class _AddPageState extends State<AddPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(label,
-                style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                style: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.bold)),
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: onAdd,
