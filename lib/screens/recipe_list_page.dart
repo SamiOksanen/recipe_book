@@ -19,21 +19,22 @@ class RecipeListPage extends StatelessWidget {
       );
     }
 
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Text('You have '
-              '${recipies.length} recipies:'),
-        ),
-        for (Recipe recipe in recipies)
-          ListTile(
-            title: Text(recipe.title),
-            subtitle: Text(
-                'Items: ${recipe.items.length}, Steps: ${recipe.steps.length}'),
-            onTap: () => onRecipeSelected(recipe),
-          ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Recipies (${recipies.length})'),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      ),
+      body: ListView(
+        children: [
+          for (Recipe recipe in recipies)
+            ListTile(
+              title: Text(recipe.title),
+              subtitle: Text(
+                  'Items: ${recipe.items.length}, Steps: ${recipe.steps.length}'),
+              onTap: () => onRecipeSelected(recipe),
+            ),
+        ],
+      ),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_book/models/recipe.dart';
 import 'package:recipe_book/recipe_book_app_state.dart';
-import 'package:recipe_book/screens/add_recipe_page.dart';
+import 'package:recipe_book/screens/edit_recipe_page.dart';
 import 'package:recipe_book/screens/recipe_list_page.dart';
 import 'package:recipe_book/screens/view_recipe_page.dart';
 
@@ -47,6 +47,16 @@ class _RecipeBookHomePageState extends State<RecipeBookHomePage> {
     }
   }
 
+  void _navigateToEdit(Recipe recipe) {
+    setState(() {
+      if (_selectedRecipe != recipe) {
+        _selectedRecipe = recipe;
+      }
+      _selectedIndex = 3;
+      _pageController.jumpToPage(3);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -75,21 +85,29 @@ class _RecipeBookHomePageState extends State<RecipeBookHomePage> {
                         .jumpToPage(value); // Navigate to the selected page
                   });
                 },
+                backgroundColor:
+                    Theme.of(context).colorScheme.surfaceContainerLow,
               ),
             ),
             Expanded(
               child: PageView(
                 controller: _pageController,
-                // physics: const NeverScrollableScrollPhysics(), // Disable swipe navigation
+                physics:
+                    const NeverScrollableScrollPhysics(), // Disable swipe navigation
                 children: [
                   RecipeListPage(onRecipeSelected: _navigateToViewPage),
-                  AddRecipePage(postSave: _navigateToHome),
+                  EditRecipePage(postSave: _navigateToViewPage),
                   if (_selectedRecipe != null)
                     ViewRecipePage(
                       recipe: _selectedRecipe!,
                       onClose: _navigateToHome,
                       onRemove: _removeRecipe,
+                      onEdit: _navigateToEdit,
                     ),
+                  if (_selectedRecipe != null)
+                    EditRecipePage(
+                        recipe: _selectedRecipe!,
+                        postSave: _navigateToViewPage),
                 ],
               ),
             ),
