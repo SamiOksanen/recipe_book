@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_book/models/recipe.dart';
-import 'package:recipe_book/recipe_book_app_state.dart';
+import 'package:recipe_book/app_state.dart';
 
-class EditRecipePage extends StatefulWidget {
+class RecipeEditPage extends StatefulWidget {
   final Recipe? recipe; // Existing recipe to edit, or null for adding
   final void Function(Recipe recipe) postSave;
-  const EditRecipePage({Key? key, this.recipe, required this.postSave})
+  const RecipeEditPage({Key? key, this.recipe, required this.postSave})
       : super(key: key);
 
   @override
-  _EditRecipePageState createState() => _EditRecipePageState();
+  _RecipeEditPageState createState() => _RecipeEditPageState();
 }
 
-class _EditRecipePageState extends State<EditRecipePage> {
+class _RecipeEditPageState extends State<RecipeEditPage> {
   final _formKey = GlobalKey<FormState>();
   late Text _pageTitle;
   late TextEditingController _titleController;
@@ -65,7 +65,7 @@ class _EditRecipePageState extends State<EditRecipePage> {
 
   void _saveRecipe() {
     if (_formKey.currentState?.validate() ?? false) {
-      final appState = Provider.of<RecipeBookAppState>(context, listen: false);
+      final appState = Provider.of<AppState>(context, listen: false);
       final newRecipe = Recipe(
         title: _titleController.text.trim(),
         items: _itemControllers.map((c) => c.text.trim()).toList(),

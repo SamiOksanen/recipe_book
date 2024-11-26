@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:recipe_book/recipe_book_app_state.dart';
-import 'package:recipe_book/recipe_book_home.dart';
+import 'package:recipe_book/app_state.dart';
+import 'package:recipe_book/screens/main_page.dart';
 
 void main() {
   LicenseRegistry.addLicense(() async* {
@@ -21,8 +21,8 @@ class RecipeBookApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return ChangeNotifierProvider<RecipeBookAppState>(
-      create: (BuildContext context) => RecipeBookAppState(),
+    return ChangeNotifierProvider<AppState>(
+      create: (BuildContext context) => AppState(),
       child: MaterialApp(
         title: 'Recipe Book',
         theme: ThemeData(
@@ -39,7 +39,7 @@ class RecipeBookApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const RecipeBookHomePage(),
+        home: const MainPage(),
       ),
     );
   }

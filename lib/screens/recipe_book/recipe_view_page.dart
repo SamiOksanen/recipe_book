@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_book/models/recipe.dart';
 
-class ViewRecipePage extends StatelessWidget {
+class RecipeViewPage extends StatelessWidget {
   final Recipe recipe;
   final VoidCallback onClose;
   final VoidCallback onRemove;
   final void Function(Recipe recipe) onEdit;
 
-  const ViewRecipePage({
+  const RecipeViewPage({
     Key? key,
     required this.recipe,
     required this.onClose,

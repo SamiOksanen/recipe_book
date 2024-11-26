@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_book/models/recipe.dart';
-import 'package:recipe_book/recipe_book_app_state.dart';
+import 'package:recipe_book/app_state.dart';
 
 class RecipeListPage extends StatelessWidget {
   final void Function(Recipe recipe) onRecipeSelected;
@@ -10,7 +10,7 @@ class RecipeListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<RecipeBookAppState>();
+    var appState = context.watch<AppState>();
     var recipies = appState.recipies;
 
     if (recipies.isEmpty) {
